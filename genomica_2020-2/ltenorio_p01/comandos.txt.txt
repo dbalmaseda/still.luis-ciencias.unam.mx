@@ -1,0 +1,137 @@
+
+# Comandos de la Práctica 01
+# Luis Tenorio Hernandez
+
+# Parte I. 
+
+mkdir genomica_2020-2
+cd genomica_2020-2/
+mkdir ltenorio_p01
+
+1. echo $0
+	-bash (Bourne Again Shell)
+cd ltenorio_p01
+2. mkdir data filtered raw_data meta scripts figures archive
+3. mv -t data filtered raw_data
+
+4. El nombre de los directorios y su organizacion es la recomendada para estructurar y  
+disponer facilmente de todos los datos necesarios para un proyecto bioinformatico
+
+#Parte II.
+
+cd scripts
+which bash
+	/bin/bash
+touch delay.sh
+nano delay.sh
+ls -l
+	total 0
+	-rw-rw-rw- 1 luist luist 135 Mar 30 11:47 delay.sh
+1. chmod 777 delay.sh
+2. ls -l
+	total 0
+	-rwxrwxrwx 1 luist luist 144 Mar 30 11:57 delay.sh
+   ./delay.sh 
+3. nano delay.sh
+	#!/bin/bash
+	echo "Después de la Parte I. necesito 1/2 minuto de descanso, que son exactamente 30 segundos."
+	sleep 30s
+	echo "Ahora sí, con todo!"
+4.  nano delay.sh
+	#!/bin/bash
+	echo "Después de la Parte I. necesito 1/2 minuto de descanso, que son exactamente 30 segundos."
+	sleep 300s
+	echo "Ahora sí, con todo!"
+   ./delay.sh &
+   ps 
+	 PID TTY          TIME CMD
+	    7 tty1     00:00:00 bash
+	   99 tty1     00:00:00 delay.sh
+	  100 tty1     00:00:00 sleep
+	  101 tty1     00:00:00 ps
+   kill 100
+
+Parte III
+
+1. En primer lugar el genoma del virus consiste de una cadena sencilla positiva de RNA  de 27-32 nucleótidos, 
+que conforman las secuencias codificantes para la proteínas que conforman la estructura del virus. El material
+ genético se encuentra rodeado de una nucleocápside, glicoproteínas de membrana, proteínas de la envoltura y 
+proteínas con forma de espícula altamente glicosiladas, el tamaño del virus está en el rango de 50 a 200 nm.
+Las espículas además de conferir la apariencia característica al coronavirus median la interacción con receptores
+ en las células del tracto respiratorio,principalmente. Una vez acoplada la subunidad proteica viral 1 se dan procesos
+ moleculares, entre ellos la proteolisis de la subunidad 2, que dan como resultado la internalización del material 
+ genético del virus dentro de la célula.
+
+2. el ectodominio de las proteínas con forma de espículas del coronavirus SARS-CoV-2 está involucrada en la entrada
+del virus a las células. Primero a través de la subunidad s1 se une a receptores en la membrana externa de las células
+y posteriormente las membranas se fusionan por acción de la subunidad s2
+
+Parte IV
+
+cd raw_data
+1. ln -t ../filtered/ sequence.fasta sequence.gff3 sequence_1.fasta sequence_2.fasta sequence_3.fasta sra_data.fasta.gz sra_data.fastq.gz
+2. mkdir proteins
+   mv sequence_1.fasta sequence_2.fasta sequence_3.fasta proteins
+3. cd proteins
+   touch glycoproteins.faa
+   head -n 3 sequence_1.fasta
+>pdb|6VYB|C Chain C, spike glycoprotein
+MGILPSPGMPALLSLVSLLSVLLMGCVAETGTQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHST
+QDLFLPFFSNVTWFHAIHVSGTNGTKRFDNPVLPFNDGVYFASTEKSNIIRGWIFGTTLDSKTQSLLIVN
+  head -n 3 sequence_2.fasta
+>pdb|6VYB|B Chain B, spike glycoprotein
+MGILPSPGMPALLSLVSLLSVLLMGCVAETGTQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHST
+QDLFLPFFSNVTWFHAIHVSGTNGTKRFDNPVLPFNDGVYFASTEKSNIIRGWIFGTTLDSKTQSLLIVN
+  head -n 3 sequence_3.fasta
+>pdb|6VYB|A Chain A, spike glycoprotein
+MGILPSPGMPALLSLVSLLSVLLMGCVAETGTQCVNLTTRTQLPPAYTNSFTRGVYYPDKVFRSSVLHST
+QDLFLPFFSNVTWFHAIHVSGTNGTKRFDNPVLPFNDGVYFASTEKSNIIRGWIFGTTLDSKTQSLLIVN
+
+4. head -n 3 sequence_3.fasta >> glycoproteins.faa
+   head -n 3 sequence_2.fasta >> glycoproteins.faa
+   head -n 3 sequence_1.fasta >> glycoproteins.faa
+
+5. head -n 6 sequence.fasta
+>NC_045512.2 Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+ATTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAA
+CGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAAC
+TAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTG
+TTGCAGCCGATCATCAGCACATCTAGGTTTCGTCCGGGTGTGACCGAAAGGTAAGATGGAGAGCCTTGTC
+CCTGGTTTCAACGAGAAAACACACGTCCAACTCAGTTTGCCTGTTTTACAGGTTCGCGACGTGCTCGTAC
+
+  zless sra_data.fasta.gz | head -n 5
+>SRR11241254.1.1 1 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
+>SRR11241254.2.1 2 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
+>SRR11241254.3.1 3 length=40
+
+6. zless sra_data.fasta.gz | grep -n \> | tail
+-n 1
+263899:>SRR11241254.131950.1 131950 length=3
+Hay 263899 headers
+
+7. zless sra_data.fastq.gz | head -n 12
+@SRR11241254.1.1 1 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
++SRR11241254.1.1 1 length=40
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+@SRR11241254.2.1 2 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
++SRR11241254.2.1 2 length=40
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+@SRR11241254.3.1 3 length=40
+GTTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAAC
++SRR11241254.3.1 3 length=40
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+
+zless sra_data.fastq.gz | awk '/G/' | wc -l
+263870
+
+8. el formato .faa contiene secuencias de aminoacidos, mientras que fasta y fastqc contienen secuencias de nucleotidos.
+   Tanto fasta como fastqc contienen la secuencia con su identificador, pero fastqc ademas contiene informacion acerca de la calidad de la secuenciacion
+   El significado de las líneas varían de acuerdo a la plataforma de secuenciación usada pero normlamente incluyen el carácter @ seguido del identificador
+   de la secuencia y una descripción opcional, La secuencia como tal, algún otro tipo de descripción de la secuencia y los valores codificados de calidad.
+9. Usando less -S sequence.gff3 el contenido del archivo se despliega ordenado.
+10. less -S sequence.gff3 | sort -k3 | grep gene| wc -l
+	28
